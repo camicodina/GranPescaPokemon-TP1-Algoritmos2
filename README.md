@@ -12,11 +12,11 @@ En el trabajo presentado
 
 _Una explicación de como compilarlo (línea de compilación) y como ejecutarlo (línea de ejecución)._
 
-+---------------------------------------------------------------+
-| $ gcc *.c -Wall -Werror -Wconversion -std=c99 -o evento_pesca |
-| $ gcc -g main.c evento_pesca.o -o main                        |
-| $ ./main                                                      |
-+---------------------------------------------------------------+
+```
+$ gcc *.c -Wall -Werror -Wconversion -std=c99 -o evento_pesca 
+$ gcc -g main.c evento_pesca.o -o main                        
+$ ./main  
+```
 
 ## Contruido con... ⚙
 
@@ -35,7 +35,7 @@ _Una explicación de como compilarlo (línea de compilación) y como ejecutarlo 
     4. Malloc y Realloc.
 
 
-## Enunciado 👩‍💻
+### Enunciado 👩‍💻
 
 La líder de gimnasio Misty organizó un evento de pesca que se llevará a cabo en su acuario, ubicado en Ciudad Celeste.
 Para ello necesitará muchos y muy variados pokémon de tipo agua. El lugar indicado en Kanto para obtener a todos
@@ -56,13 +56,11 @@ Las funcionalidades que se deben implementar se detallan a continuación:
        encontrar ningún registro con el formato correcto , se debe devolver error.
        Devuelve un puntero a un arrecife válido o NULL en caso de error.
 
-    arrecife_t* crear_arrecife(char* ruta_archivo);
 
 
     2) Función que crea un acuario vacío reservando la memoria necesaria para el mismo.
        Devuelve el acuario o NULL en caso de error.
 
-    acuario_t* crear_acuario();
 
 
     3) Función que deberá sacar del arrecife a todos los pokémon que satisfagan la
@@ -77,48 +75,45 @@ Las funcionalidades que se deben implementar se detallan a continuación:
        acuario (su tamaño se ajustará luego de cada traslado).
        Devuelve -1 en caso de error o 0 en caso contrario.
 
-    int trasladar_pokemon(arrecife_t* arrecife , acuario_t* acuario , bool (*seleccionar_pokemon) (pokemon_t*), int cant_seleccion);
 
 
     4) Procedimiento que dado un arrecife deberá mostrar por pantalla a todos los pokemon que contiene.
 
-    void censar_arrecife(arrecife_t* arrecife , void (*mostrar_pokemon)(pokemon_t*));
+
 
 
     5) Función que dado un acuario guarda en un archivo de texto a los pokemones que contiene.
        Devuelve 0 si se realizo con éxito o -1 si hubo algun problema para guardar el archivo.
 
-    int guardar_datos_acuario(acuario_t* acuario , const char* nombre_archivo);
 
 
     6) Libera la memoria que fue reservada para el acuario.
     
-    void liberar_acuario(acuario_t* acuario);
 
 
     7) Libera la memoria que fue reservada para el arrecife.
 
-    void liberar_arrecife(arrecife_t* arrecife);
 
 
 A su vez, se cuenta con los siguientes registros a utilizar en el presente trabajo:
-+----------------------------------+
-| typedef struct pokemon{          |
-|     char especie[MAX_ESPECIE];   |
-|     int velocidad;               |
-|     int peso;                    |
-|     char color[MAX_COLOR];       |
-| } pokemon_t;                     |
-| typedef struct acuario{          |
-|     pokemon_t* pokemon;          |
-|     int cantidad_pokemon;        |
-| } acuario_t;                     |
-|                                  |
-|  typedef struct arrecife{        |
-|     pokemon_t* pokemon;          |
-|     int cantidad_pokemon;        |
-| } arrecife_t;                    |
-+----------------------------------+
+
+```
+typedef struct pokemon{          
+    char especie[MAX_ESPECIE];   
+    int velocidad;               
+    int peso;                    
+    char color[MAX_COLOR];       
+} pokemon_t;                     
+typedef struct acuario{          
+    pokemon_t* pokemon;          
+    int cantidad_pokemon;        
+} acuario_t;                     
+                                 
+ typedef struct arrecife{        
+    pokemon_t* pokemon;          
+    int cantidad_pokemon;        
+} arrecife_t;                    
+```
 
 Los pokémon pertenecientes al arrecife se encontrarán en el archivo arrecife.txt cuya ruta llega como parámetro.
 El archivo tendrá la siguiente información:
@@ -132,4 +127,4 @@ formato:
 
 
 
-====  Programado con amor ( ˘ ³˘)♥  =====
+_Programado con amor ( ˘ ³˘)♥_

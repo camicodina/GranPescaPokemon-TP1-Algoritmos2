@@ -5,25 +5,8 @@
 
 #define MAX_ESPECIE 100
 #define MAX_COLOR 50
-#define FORMATO_LECTURA "%[^;];%i;%i[^;];%\n"
-#define FORMATO_ESCRITURA "%[^;];%i;%i[^;];%\n"
-
-typedef struct pokemon{
-  char especie[MAX_ESPECIE];
-  int velocidad;
-  int peso;
-  char color[MAX_COLOR];
-} pokemon_t;
-
-typedef struct acuario{
-  pokemon_t* pokemon;
-  int cantidad_pokemon;
-} acuario_t;
-
-typedef struct arrecife{
-  pokemon_t* pokemon;
-  int cantidad_pokemon;
-} arrecife_t;
+#define FORMATO_LECTURA "%[^;];%i;%i;%\n"
+#define FORMATO_ESCRITURA "%[^;];%i;%i;%\n"
 
 /*
 * Función que dado un archivo carga los pokémon que viven en el arrecife
@@ -38,8 +21,8 @@ typedef struct arrecife{
 arrecife_t* crear_arrecife(const char* ruta_archivo){
   arrecife_t *arrecife = (arrecife_t*)malloc(sizeof(arrecife_t));
   pokemon_t **pokemon;
-  arrecife->pokemon = malloc(sizeof(pokemon_t));
-  arrecife->cantidad_pokemon = malloc(sizeof(int));
+  arrecife->pokemon = (pokemon_t*)malloc(sizeof(pokemon_t));
+  arrecife->cantidad_pokemon = (int*)malloc(sizeof(int));
   pokemon = &arrecife->pokemon;
   int **cantidad_pokemon;
   arrecife->cantidad_pokemon = 0;
@@ -156,7 +139,7 @@ acuario_t* crear_acuario(){
     };
    return 0;
  }
- 
+
  /*
  * Libera la memoria que fue reservada para el acuario.
  */
