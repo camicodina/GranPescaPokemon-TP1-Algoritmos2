@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
 #include "evento_pesca.h"
 
 #define MAX_ESPECIE 100
 #define MAX_COLOR 50
+#define FORMATO_LECTURA "%[^;];%i;%i[^;];%\n"
+#define FORMATO_ESCRITURA "%[^;];%i;%i[^;];%\n"
 
 typedef struct pokemon{
   char especie[MAX_ESPECIE];
@@ -31,6 +35,33 @@ typedef struct arrecife{
 * encontrar ningún registro con el formato correcto , se debe devolver error.
 * Devuelve un puntero a un arrecife válido o NULL en caso de error.
 */
+
+int leer_archivo(FILE* archivo_pokemones_arrecife){
+  pokemon_t pokemon_arrecife;
+  int leidos = fscanf( archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_arrecife.especie[MAX_ESPECIE], &pokemon_arrecife.velocidad, &pokemon_arrecife.peso, pokemon_arrecife.color[MAX_COLOR]);
+  if(!leidos){
+    printf("No se pudo leer ningunas linea.\n");
+    return NULL;
+  };
+  while(leidos != EOF && leidos){
+    fprintf(actualizado, FORMATO_ESCRITURA, actual.pais, actual.anio, actual.disciplina, actual.nombre, actual.puntos);
+}
+
+// voy a necesitar realloc para crear un array de pokemones dinamico
+
+int crear_arrecife(char* ruta_archivo){
+  FILE* archivo_pokemones_arrecife = fopen(ruta_archivo,"r");
+  if(!archivo_pokemones_arrecife){
+    printf("No se pudo abrir el archivo de pokemones que viven en el arrecife.\n");
+    return NULL;
+  };
+  leer_archivo(archivo_pokemones_arrecife);
+
+  fclose(archivo_pokemones_arrecife);
+
+  return 0;
+}
+
 arrecife_t* crear_arrecife(char* ruta_archivo);
 
 
