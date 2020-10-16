@@ -127,9 +127,16 @@ acuario_t* crear_acuario(){
  */
 
  void censar_arrecife(arrecife_t* arrecife , void (* mostrar_pokemon)(pokemon_t *)){
-   
+   pokemon_t **pokemones_nadando_felices = &arrecife->pokemon;
+   int **cantidad_de_pokemones_nadando_felices = &arrecife->cantidad_pokemon;
+   printf("Pokemones en el arrecife:\n");
+   int i=0;
+   for(int i=0; i<(**cantidad_de_pokemones_nadando_felices); i++){
+     printf("-------------------");
+     printf("Especie: %c\nVelocidad: %i\nPeso: %i\nColor: %c\n",(**pokemones_nadando_felices).especie[MAX_ESPECIE], (**pokemones_nadando_felices).velocidad,(**pokemones_nadando_felices).peso,(**pokemones_nadando_felices).color[MAX_COLOR]);
+     printf("-------------------");
+   };
  }
-
 
  /*
  * Función que dado un acuario guarda en un archivo de texto a los pokemones que contiene.
