@@ -142,11 +142,21 @@ acuario_t* crear_acuario(){
  * Función que dado un acuario guarda en un archivo de texto a los pokemones que contiene.
  * Devuelve 0 si se realizo con éxito o -1 si hubo algun problema para guardar el archivo.
  */
+
  int guardar_datos_acuario (acuario_t* acuario , const char* nombre_archivo){
+   pokemon_t **datos_pokemones_en_acuario = &acuario->pokemon;
+   int **cantidad_pokemones_acuario = &acuario->cantidad_pokemon;
+   FILE* nuevo_acuario = fopen(nombre_archivo,"w");
+   if(!nuevo_acuario){
+     return -1;
+    };
+    int i=0;
+    for(int i=0; i<(**cantidad_pokemones_acuario); i++){
+      fprintf(nuevo_acuario, FORMATO_ESCRITURA, (**(datos_pokemones_en_acuario+i)).especie[MAX_ESPECIE],(**(datos_pokemones_en_acuario+i)).velocidad,(**(datos_pokemones_en_acuario+i)).peso,(**(datos_pokemones_en_acuario+i)).color[MAX_COLOR]);
+    };
    return 0;
  }
-
-
+ 
  /*
  * Libera la memoria que fue reservada para el acuario.
  */
