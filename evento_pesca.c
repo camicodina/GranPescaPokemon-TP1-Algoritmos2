@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <string.h>
 #include <stdlib.h>
 #include "evento_pesca.h"
 
@@ -36,41 +35,49 @@ typedef struct arrecife{
 * Devuelve un puntero a un arrecife válido o NULL en caso de error.
 */
 
-arrecife_t crear_arrecife(char* ruta_archivo){
-  arrecife_t *arrecife = (arrecife_t*)malloc(100* sizeof(arrecife_t));
-  arrecife_t arrecife_pokemon = 
-  // pokemon_t *pokemones_a_arrecife = (pokemon_t*)malloc(100* sizeof(pokemon_t));
-  pokemon_t pokemon_leido;
+arrecife_t* crear_arrecife(const char* ruta_archivo){
+  arrecife_t *arrecife = (arrecife_t*)malloc(sizeof(arrecife_t));
+  pokemon_t **pokemon;
+  pokemon = &arrecife->pokemon;
+  int **cantidad_pokemon;
+  arrecife->cantidad_pokemon = 0;
+  cantidad_pokemon = &arrecife->cantidad_pokemon;
   int i=0;
-  arrecife->pokemon = pokemon_leido;
+
   FILE* archivo_pokemones_arrecife = fopen(ruta_archivo,"r");
   if(!archivo_pokemones_arrecife){
     printf("No se pudo abrir el archivo de pokemones que viven en el arrecife.\n");
     return NULL;
   };
-  
-  int leidos = fscanf( archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie[MAX_ESPECIE], &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color[MAX_COLOR]);
+  pokemon_t pokemon_leido;
+  int leidos = fscanf(archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie[MAX_ESPECIE], &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color[MAX_COLOR]);
   if(!leidos){
-    printf("No se pudo leer ningunas linea.\n");
+    printf("No se pudo leer ninguna linea.\n");
+    exit(0);
     return NULL;
   };
-  while(leidos != EOF){
-      pokemones_a_arrecife[i] = leidos;
+  while(leidos != EOF && !ferror(archivo_pokemones_arrecife)){
+      **(pokemon+i) = pokemon_leido;
+      i += 1;
+      cantidad_pokemon += 1;
+      pokemon = (pokemon_t*)realloc(pokemon,i);
       int leidos = fscanf( archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie[MAX_ESPECIE], &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color[MAX_COLOR]);
+  }
   fclose(archivo_pokemones_arrecife);
-
-  return *arrecife;
+  return &arrecife;
 }
-
-//arrecife_t* crear_arrecife(char* ruta_archivo);
-
-
 
  /*
  * Función que crea un acuario vacío reservando la memoria necesaria para el mismo.
  * Devuelve el acuario o NULL en caso de error.
  */
- acuario_t* crear_acuario ();
+
+acuario_t* crear_acuario(){
+  acuario_t *acuario = (acuario_t*)malloc(sizeof(acuario_t));
+  if (!acuario) return NULL;
+  return &acuario;
+}
+
  /*
  * Función que deberá sacar del arrecife a todos los pokémon que satisfagan la
  * condición dada por el puntero a función (que devuelvan true) y trasladarlos
@@ -84,22 +91,37 @@ arrecife_t crear_arrecife(char* ruta_archivo){
  * acuario (su tamaño se ajustará luego de cada traslado).
  * Devuelve -1 en caso de error o 0 en caso contrario.
  */
- int trasladar_pokemon (arrecife_t* arrecife , acuario_t* acuario , bool (* seleccionar_pokemon )
- (pokemon_t *), int cant_seleccion);
+
+ int trasladar_pokemon (arrecife_t* arrecife , acuario_t* acuario , bool (* seleccionar_pokemon ) (pokemon_t *), int cant_seleccion){
+   
+   return 0; 
+ }
+ 
  /*
  * Procedimiento que dado un arrecife deberá mostrar por pantalla a todos los pokemon que contiene.
  */
- void censar_arrecife(arrecife_t* arrecife , void (* mostrar_pokemon)(pokemon_t *));
+
+ void censar_arrecife(arrecife_t* arrecife , void (* mostrar_pokemon)(pokemon_t *)){
+   
+ }
+
+
  /*
  * Función que dado un acuario guarda en un archivo de texto a los pokemones que contiene.
  * Devuelve 0 si se realizo con éxito o -1 si hubo algun problema para guardar el archivo.
  */
- int guardar_datos_acuario (acuario_t* acuario , const char* nombre_archivo);
+ int guardar_datos_acuario (acuario_t* acuario , const char* nombre_archivo){
+   return 0;
+ }
+
+
  /*
  * Libera la memoria que fue reservada para el acuario.
  */
- void liberar_acuario(acuario_t* acuario);
- /*
- * Libera la memoria que fue reservada para el arrecife.
- */
- void liberar_arrecife(arrecife_t* arrecife);
+ void liberar_acuario(acuario_t* acuario){
+   free(acuario);
+ }
+
+ void liberar_arrecife(arrecife_t* arrecife){
+   free(arrecife);
+ }

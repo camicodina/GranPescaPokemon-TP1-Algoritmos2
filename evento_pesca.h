@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #define MAX_ESPECIE 100
 #define MAX_COLOR 50
@@ -33,6 +34,7 @@ typedef struct arrecife{
  * encontrar ningún registro con el formato correcto, se debe devolver error.
  * Devuelve un puntero a un arrecife válido o NULL en caso de error.
  */
+
 arrecife_t* crear_arrecife(const char* ruta_archivo);
 
 /*
