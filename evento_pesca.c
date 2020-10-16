@@ -38,6 +38,8 @@ typedef struct arrecife{
 arrecife_t* crear_arrecife(const char* ruta_archivo){
   arrecife_t *arrecife = (arrecife_t*)malloc(sizeof(arrecife_t));
   pokemon_t **pokemon;
+  arrecife->pokemon = malloc(sizeof(pokemon_t));
+  arrecife->cantidad_pokemon = malloc(sizeof(int));
   pokemon = &arrecife->pokemon;
   int **cantidad_pokemon;
   arrecife->cantidad_pokemon = 0;
@@ -74,6 +76,8 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
 
 acuario_t* crear_acuario(){
   acuario_t *acuario = (acuario_t*)malloc(sizeof(acuario_t));
+  acuario->pokemon = malloc(sizeof(pokemon_t));
+  acuario->cantidad_pokemon = malloc(sizeof(int));
   if (!acuario) return NULL;
   return &acuario;
 }
@@ -93,7 +97,28 @@ acuario_t* crear_acuario(){
  */
 
  int trasladar_pokemon (arrecife_t* arrecife , acuario_t* acuario , bool (* seleccionar_pokemon ) (pokemon_t *), int cant_seleccion){
-   
+   acuario->cantidad_pokemon = 0;
+   pokemon_t **pokemones_seleccionados = &acuario->pokemon;
+   pokemon_t **pokemones_existentes = &arrecife->pokemon;
+   int **cantidad_pokemones_seleccionados = &acuario->cantidad_pokemon;
+   int **cantidad_pokemones_existentes = &arrecife->cantidad_pokemon;
+   int i=0;
+   int n=1;
+   for(int i=0; i < cant_seleccion; i++){
+     if(seleccionar_pokemon && (**cantidad_pokemones_seleccionados) < (**cantidad_pokemones_existentes)){
+       **(pokemones_seleccionados+i) = **(pokemones_existentes+i);
+       pokemones_seleccionados = (pokemon_t*)realloc(pokemones_seleccionados,n);
+       acuario->cantidad_pokemon +=1;
+       n+=1;
+       for(int x= i+1; x<(**cantidad_pokemones_existentes); x++){
+         **(pokemones_existentes+(x-1)) = **(pokemones_existentes+x);
+         cantidad_pokemones_existentes -= 1;
+         pokemones_existentes = (pokemon_t*)realloc(pokemones_existentes,cantidad_pokemones_existentes);
+       };
+     }else{
+       return -1;
+     };
+   };
    return 0; 
  }
  
@@ -120,8 +145,12 @@ acuario_t* crear_acuario(){
  */
  void liberar_acuario(acuario_t* acuario){
    free(acuario);
+   free(acuario->cantidad_pokemon);
+   free(acuario->pokemon);
  }
 
  void liberar_arrecife(arrecife_t* arrecife){
    free(arrecife);
+   free(arrecife->pokemon);
  }
+
