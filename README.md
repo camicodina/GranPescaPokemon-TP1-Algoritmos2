@@ -5,35 +5,38 @@ _Trabajo práctico Nº1 de Algoritmos y Programación II, Cátedra Mendez, Facul
 
 ## Introducción 🚀 
 
-En el trabajo presentado 
- Una breve introducción sobre el funcionamiento del trabajo presentado.
+En el trabajo presentado utiliza las funciones en evento_pesca.c para llamarlas desde el main.c.
 
 ## Modo de Uso 📝
 
 _Una explicación de como compilarlo (línea de compilación) y como ejecutarlo (línea de ejecución)._
 
+Si funcionara usaría estos comandos:
 
 > $ gcc *.c -Wall -Werror -Wconversion -std=c99 -o evento_pesca
 > $ gcc -g main.c evento_pesca.o -o main                
 > $ ./main
+> $ valgrind --leak-check=full --track-origins=yes --show-reachable=yes ./main
 s
 
 ## Contruido con... ⚙
 
     1. Punteros.
 
-
+Los punteros son variables cuyo valor es una dirección de memoria representada como un entero. El compilador debe saber el tipo de data que vamos a almacenar en la cariable a la cual apunta por lo que es necesario especificarla.
 
     2. Aritmética de punteros.
 
-
+Podemos operar con los punteros al acceder a los valores que contienen. Los utilizamos puesto que hacen más sencillo el uso de strings y arrays y nos permiten retornar multiples valores de una función entre otros beneficios.
 
     3. Punteros a funciones.
 
-
+Los punteros a funciones almacenan la dirección de la función. Podemos llamar a esta función en cualquier momento a través del puntero.
 
     4. Malloc y Realloc.
 
+Malloc y Realloc son dos funciones de la librería estándar de C.
+Malloc retorna la dirección del primer byte de memoria que se busca reservar y en el argumento debemos especificar la cantidad de bytes requeridos. Se debe asignar a un puntero
 
 ### Enunciado 👩‍💻
 

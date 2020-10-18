@@ -16,90 +16,89 @@ const int MAX_POKEMON = 100;
 * - - Etc. sean creativos!
 */
 
-pokemon_t* pokemones_rapidos(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
-    pokemon_t **pokemones_recibidos = &arrecife->pokemon;
+bool pokemones_rapidos(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
     int i=0;
     int velocidad_alta = 80;
-    if((*arrecife).pokemon->velocidad >= velocidad_alta){
-        for(i=0; i<MAX_POKEMON; i++){
-            *(pokemones_seleccionados+i) = **(pokemones_recibidos+i);
+    for(i=0; i<MAX_POKEMON; i++){
+        if((*arrecife).pokemon[i].velocidad >= velocidad_alta){
+            *(pokemones_seleccionados+i) = (*arrecife).pokemon[i];
         }
     }
-    return pokemones_seleccionados;
+    bool es_rapido = true;
+    return es_rapido;
 }
 
-pokemon_t* pokemones_azules(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
-    pokemon_t **pokemones_recibidos = &arrecife->pokemon;
+
+bool pokemones_azules(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
+
     int i=0;
-    if(strcomp((*arrecife->pokemon->color), "azul") == 0){
+    for(i=0; i<MAX_POKEMON; i++){
+        if(strcmp((*arrecife).pokemon[i].color, "azul") == 0){
+            *(pokemones_seleccionados+i) = (*arrecife).pokemon[i];
+        }
+     }
+    bool es_azul = true;
+    return es_azul;
+}
+
+bool pokemones_rojos(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
+
+    int i=0;
+    if(strcmp((*arrecife).pokemon[i].color, "rojo") == 0){
         for(i=0; i<MAX_POKEMON; i++){
-            *(pokemones_seleccionados+i) = **(pokemones_recibidos+i);
+            *(pokemones_seleccionados+i) = (*arrecife).pokemon[i];
         }
      }
       
-    return pokemones_seleccionados;
+    bool es_rojo = true;
+    return es_rojo;
 }
 
-pokemon_t* pokemones_rojos(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
-    pokemon_t **pokemones_recibidos = &arrecife->pokemon;
-    int i=0;
-    if(strcomp((*arrecife->pokemon->color), "rojo") == 0){
-        for(i=0; i<MAX_POKEMON; i++){
-            *(pokemones_seleccionados+i) = **(pokemones_recibidos+i);
-        }
-     }
-      
-    return pokemones_seleccionados;
-}
+bool pokemones_lentos(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
 
-pokemon_t* pokemones_lentos(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
-    pokemon_t **pokemones_recibidos = &arrecife->pokemon;
     int i=0;
     int velocidad_baja = 50;
-    if((*arrecife).pokemon->velocidad <= velocidad_baja){
-        for(i=0; i<MAX_POKEMON; i++){
-            *(pokemones_seleccionados+i) = **(pokemones_recibidos+i);
+    for(i=0; i<MAX_POKEMON; i++){
+        if((*arrecife).pokemon->velocidad <= velocidad_baja){
+            *(pokemones_seleccionados+i) = (*arrecife).pokemon[i];
         }
     }
-    return pokemones_seleccionados;
+    bool es_lento = true;
+    return es_lento;
 }
 
-pokemon_t* los_mejores_pokemones(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
+bool los_mejores_pokemones(arrecife_t* arrecife, pokemon_t* pokemones_seleccionados){
     // aquellos pokemon que la programadora considera "mejores de su especie": srápidos y rojos.
-    pokemon_t **pokemones_recibidos = &arrecife->pokemon;
+
     int i=0;
     int velocidad_alta = 80;
-    if(((*arrecife).pokemon->velocidad >= velocidad_alta) && (strcomp((*arrecife->pokemon->color), "rojo") == 0)){
-        for(i=0; i<MAX_POKEMON; i++){
-            *(pokemones_seleccionados+i) = **(pokemones_recibidos+i);
+    for(i=0; i<MAX_POKEMON; i++){
+        if(((*arrecife).pokemon->velocidad >= velocidad_alta) && (strcmp((*arrecife).pokemon[i].color, "rojo") == 0)){
+            *(pokemones_seleccionados+i) = (*arrecife).pokemon[i];
         }
     }
 
-    return pokemones_seleccionados;
+    bool es_especial = true;
+    return es_especial;
 }
 
 // Opciones mostrar
 
-pokemon_t* mostrar_lista(arrecife_t* arrecife){
-    pokemon_t **pokemones_nadando_felices = &arrecife->pokemon;
-    int **cantidad_de_pokemones_nadando_felices = &arrecife->cantidad_pokemon;
+void mostrar_lista(arrecife_t* arrecife){
     int i=0;
-    for(i=0; i<(**cantidad_de_pokemones_nadando_felices); i++){
+    for(i=0; i<((*arrecife).cantidad_pokemon); i++){
         printf("✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩");
-        printf("Especie: %c\nVelocidad: %i\nPeso: %i\nColor: %c\n",(**(pokemones_nadando_felices+i)).especie, (**(pokemones_nadando_felices+i)).velocidad,(**(pokemones_nadando_felices+i)).peso,(**(pokemones_nadando_felices+i)).color);
+        printf("Especie: %c\nVelocidad: %i\nPeso: %i\nColor: %c\n",((*arrecife).pokemon[i].especie),((*arrecife).pokemon[i].velocidad),((*arrecife).pokemon[i].peso),((*arrecife).pokemon[i].color));
         printf("✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩");
-        
     }
 }
 
-pokemon_t* mostrar_cuadro(arrecife_t* arrecife){
-    pokemon_t **pokemones_nadando_felices = &arrecife->pokemon;
-    int **cantidad_de_pokemones_nadando_felices = &arrecife->cantidad_pokemon;
+void mostrar_cuadro(arrecife_t* arrecife){
     int i=0;
     printf("-----------------------------------------------------------------\n");
     printf("ESPECIE          VELOCIDAD          PESO          COLOR          \n");
-    for(i=0; i<(**cantidad_de_pokemones_nadando_felices); i++){
-        printf("%c          %i          %i          %c          \n",(**(pokemones_nadando_felices+i)).especie, (**(pokemones_nadando_felices+i)).velocidad,(**(pokemones_nadando_felices+i)).peso,(**(pokemones_nadando_felices+i)).color);
+    for(i=0; i<((*arrecife).cantidad_pokemon); i++){
+        printf("%c          %i          %i          %c          \n",((*arrecife).pokemon[i].especie),((*arrecife).pokemon[i].velocidad),((*arrecife).pokemon[i].peso),((*arrecife).pokemon[i].color));
     printf("-----------------------------------------------------------------\n");
     }
 }
@@ -107,7 +106,7 @@ pokemon_t* mostrar_cuadro(arrecife_t* arrecife){
 //--------------------------------------//  
 
 bool (*seleccionar_pokemon[5]) (pokemon_t*) = {pokemones_rapidos, pokemones_azules, pokemones_rojos, pokemones_lentos, los_mejores_pokemones};
-void (*mostrar_pokemon[3])(pokemon_t* ) = {mostrar_lista, mostrar_cuadro};
+void (*mostrar_pokemon[2])(pokemon_t* ) = {mostrar_lista, mostrar_cuadro};
 
 //--------------------------------------// 
 
@@ -145,7 +144,7 @@ void opcion1(arrecife_de_pokemones, acuario_de_pokemones){
     if(valorMisty == 1){
         censar_arrecife(arrecife_de_pokemones, mostrar_lista(arrecife_de_pokemones));
     }else if(valorMisty == 2){
-        censar_arrecife(arrecife_de_pokemones, mostrar_lista(arrecife_de_pokemones));
+        censar_arrecife(arrecife_de_pokemones, mostrar_cuadro(arrecife_de_pokemones));
     }else if(valorMisty == 0){
         introduccion(arrecife_de_pokemones, acuario_de_pokemones);
     }else{
@@ -220,7 +219,7 @@ int main (){
 
     free(pokemones_seleccionados);
     liberar_acuario(acuario_de_pokemones);
-    liberar_arrecife(acuario_de_pokemones);
+    liberar_arrecife(arrecife_de_pokemones);
     
     return 0;
 }

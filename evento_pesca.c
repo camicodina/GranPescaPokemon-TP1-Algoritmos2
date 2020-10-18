@@ -54,7 +54,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
       (*arrecife).cantidad_pokemon += 1;
       pokemon = realloc(pokemon,sizeof(pokemon_t)*((size_t)(*arrecife).cantidad_pokemon +1));
       if(pokemon == NULL) return NULL;
-      int leidos = fscanf( archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie, &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color);
+      leidos = fscanf( archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie, &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color);
     }
     fclose(archivo_pokemones_arrecife);
 
@@ -73,7 +73,9 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
 
 acuario_t* crear_acuario(){
   acuario_t* acuario = malloc(sizeof(acuario_t));
-  if(acuario = NULL) return NULL;
+  if(acuario == NULL){
+    return NULL;
+  } 
   acuario->pokemon = malloc(sizeof(pokemon_t));
   (*acuario).cantidad_pokemon = 0;
   if (!acuario) return NULL;
@@ -97,7 +99,7 @@ acuario_t* crear_acuario(){
  int trasladar_pokemon (arrecife_t* arrecife , acuario_t* acuario , bool (* seleccionar_pokemon ) (pokemon_t *), int cant_seleccion){
    acuario->cantidad_pokemon = 0;
    int i=0;
-   int n=1;
+   size_t n=1;
    if(cant_seleccion > ((*arrecife).cantidad_pokemon)){
      printf("Vamo a calmarno! No podes trasladar tantos pokemones...");
      return -1;
@@ -111,7 +113,7 @@ acuario_t* crear_acuario(){
        for(int x= i+1; x<((*arrecife).cantidad_pokemon); x++){
          (*arrecife).pokemon[x-1] = (*arrecife).pokemon[x];
          (*arrecife).cantidad_pokemon -= 1;
-         (*arrecife).pokemon = (pokemon_t*)realloc((*arrecife).pokemon,(*arrecife).cantidad_pokemon);
+         (*arrecife).pokemon = realloc((*arrecife).pokemon,sizeof(pokemon_t)*((size_t)(*arrecife).cantidad_pokemon));
        };
      }else{
        return -1;
@@ -126,7 +128,7 @@ acuario_t* crear_acuario(){
 
  void censar_arrecife(arrecife_t* arrecife , void (* mostrar_pokemon)(pokemon_t *)){
    printf("Pokemones en el arrecife:\n");
-   mostrar_pokemon;
+   mostrar_pokemon(arrecife->pokemon);
  }
 
  /*
