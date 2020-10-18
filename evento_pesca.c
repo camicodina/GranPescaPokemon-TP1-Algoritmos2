@@ -158,12 +158,17 @@ acuario_t* crear_acuario(){
  * Libera la memoria que fue reservada para el acuario.
  */
  void liberar_acuario(acuario_t* acuario){
+    if((*acuario).cantidad_pokemon>0){
+     free((*acuario).pokemon);
+   }
    free(acuario);
-   free(acuario->pokemon);
  }
 
  void liberar_arrecife(arrecife_t* arrecife){
+    if((*arrecife).cantidad_pokemon>0){
+     free((*arrecife).pokemon);
+   }
    free(arrecife);
-   free(arrecife->pokemon);
  }
+ 
 

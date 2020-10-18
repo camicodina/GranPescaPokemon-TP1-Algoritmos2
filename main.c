@@ -86,7 +86,7 @@ pokemon_t* mostrar_lista(arrecife_t* arrecife){
     int i=0;
     for(i=0; i<(**cantidad_de_pokemones_nadando_felices); i++){
         printf("✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩");
-        printf("Especie: %c\nVelocidad: %i\nPeso: %i\nColor: %c\n",(**pokemones_nadando_felices).especie, (**pokemones_nadando_felices).velocidad,(**pokemones_nadando_felices).peso,(**pokemones_nadando_felices).color);
+        printf("Especie: %c\nVelocidad: %i\nPeso: %i\nColor: %c\n",(**(pokemones_nadando_felices+i)).especie, (**(pokemones_nadando_felices+i)).velocidad,(**(pokemones_nadando_felices+i)).peso,(**(pokemones_nadando_felices+i)).color);
         printf("✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩");
         
     }
@@ -96,22 +96,18 @@ pokemon_t* mostrar_cuadro(arrecife_t* arrecife){
     pokemon_t **pokemones_nadando_felices = &arrecife->pokemon;
     int **cantidad_de_pokemones_nadando_felices = &arrecife->cantidad_pokemon;
     int i=0;
-    printf("✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩");
-    printf("Especie: %c\nVelocidad: %i\nPeso: %i\nColor: %c\n",(**pokemones_nadando_felices).especie, (**pokemones_nadando_felices).velocidad,(**pokemones_nadando_felices).peso,(**pokemones_nadando_felices).color);
-    printf("✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩");
+    printf("-----------------------------------------------------------------\n");
+    printf("ESPECIE          VELOCIDAD          PESO          COLOR          \n");
+    for(i=0; i<(**cantidad_de_pokemones_nadando_felices); i++){
+        printf("%c          %i          %i          %c          \n",(**(pokemones_nadando_felices+i)).especie, (**(pokemones_nadando_felices+i)).velocidad,(**(pokemones_nadando_felices+i)).peso,(**(pokemones_nadando_felices+i)).color);
+    printf("-----------------------------------------------------------------\n");
+    }
 }
-
-
-pokemon_t* mostrar_dibujo(arrecife_t* arrecife){
-    pokemon_t **pokemones_nadando_felices = &arrecife->pokemon;
-    int **cantidad_de_pokemones_nadando_felices = &arrecife->cantidad_pokemon;
-    int i=0;
-} 
 
 //--------------------------------------//  
 
 bool (*seleccionar_pokemon[5]) (pokemon_t*) = {pokemones_rapidos, pokemones_azules, pokemones_rojos, pokemones_lentos, los_mejores_pokemones};
-void (*mostrar_pokemon[3])(pokemon_t* ) = {mostrar_lista, mostrar_cuadro, mostrar_dibujo};
+void (*mostrar_pokemon[3])(pokemon_t* ) = {mostrar_lista, mostrar_cuadro};
 
 //--------------------------------------// 
 
@@ -143,15 +139,12 @@ void opcion1(arrecife_de_pokemones, acuario_de_pokemones){
     printf("Elija una opción de visualización de los pokemon en el arrecife\n");
     printf("1 - Ver lista\n");
     printf("2 - Ver cuadro\n");
-    printf("3 - Dibujo ASCII\n");
     printf("0 - Volver al menu principal\n");
     scanf("%i", &valorMisty);
 
     if(valorMisty == 1){
         censar_arrecife(arrecife_de_pokemones, mostrar_lista(arrecife_de_pokemones));
     }else if(valorMisty == 2){
-        censar_arrecife(arrecife_de_pokemones, mostrar_lista(arrecife_de_pokemones));
-    }else if(valorMisty == 3){
         censar_arrecife(arrecife_de_pokemones, mostrar_lista(arrecife_de_pokemones));
     }else if(valorMisty == 0){
         introduccion(arrecife_de_pokemones, acuario_de_pokemones);
