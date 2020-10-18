@@ -3,13 +3,13 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include <stdlib.h>
 
 #define MAX_ESPECIE 100
 #define MAX_COLOR 50
-#define MAX_POKEMON 100
-#define FORMATO_LECTURA "%[^;];%i;%i[^;];%\n"
-#define FORMATO_ESCRITURA "%[^;];%i;%i[^;];%\n"
+#define FORMATO_LECTURA "%[^;];%i;%i;%[^\n]\n"
+#define FORMATO_ESCRITURA "%s:%i;%i;%s\n"
 
 typedef struct pokemon{
   char especie[MAX_ESPECIE];

@@ -12,11 +12,11 @@ En el trabajo presentado
 
 _Una explicación de como compilarlo (línea de compilación) y como ejecutarlo (línea de ejecución)._
 
-```
-$ gcc *.c -Wall -Werror -Wconversion -std=c99 -o evento_pesca 
-$ gcc -g main.c evento_pesca.o -o main                        
-$ ./main  
-```
+
+`$ gcc *.c -Wall -Werror -Wconversion -std=c99 -o evento_pesca`
+`$ gcc -g main.c evento_pesca.o -o main`                  
+`$ ./main`  
+
 
 ## Contruido con... ⚙
 
@@ -78,7 +78,6 @@ Las funcionalidades que se deben implementar se detallan a continuación:
 
 
     4) Procedimiento que dado un arrecife deberá mostrar por pantalla a todos los pokemon que contiene.
-
 
 
 

@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include <stdlib.h>
 #include "evento_pesca.h"
 
 #define MAX_ESPECIE 100
 #define MAX_COLOR 50
-#define FORMATO_LECTURA "%[^;];%i;%i;%\n"
-#define FORMATO_ESCRITURA "%[^;];%i;%i;%\n"
+#define FORMATO_LECTURA "%[^;];%i;%i;%[^\n]\n"
+#define FORMATO_ESCRITURA "%s:%i;%i;%s\n"
 
 /*
 * Función que dado un archivo carga los pokémon que viven en el arrecife
@@ -19,36 +20,49 @@
 */
 
 arrecife_t* crear_arrecife(const char* ruta_archivo){
-  arrecife_t *arrecife = (arrecife_t*)malloc(sizeof(arrecife_t));
+  arrecife_t* arrecife = malloc(sizeof(arrecife_t));
+  if(arrecife == NULL) return NULL;
   pokemon_t **pokemon;
   arrecife->pokemon = (pokemon_t*)malloc(sizeof(pokemon_t));
-  arrecife->cantidad_pokemon = (int*)malloc(sizeof(int));
   pokemon = &arrecife->pokemon;
-  int **cantidad_pokemon;
-  arrecife->cantidad_pokemon = 0;
-  cantidad_pokemon = &arrecife->cantidad_pokemon;
+  (*arrecife).cantidad_pokemon = 0;
+  
   int i=0;
 
-  FILE* archivo_pokemones_arrecife = fopen(ruta_archivo,"r");
-  if(!archivo_pokemones_arrecife){
-    printf("No se pudo abrir el archivo de pokemones que viven en el arrecife.\n");
-    return NULL;
-  };
-  pokemon_t pokemon_leido;
-  int leidos = fscanf(archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie[MAX_ESPECIE], &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color[MAX_COLOR]);
-  if(!leidos){
-    printf("No se pudo leer ninguna linea.\n");
-    exit(0);
-    return NULL;
-  };
-  while(leidos != EOF && !ferror(archivo_pokemones_arrecife)){
+  char tipo_de_archivo[3];
+  size_t largo_nombre_archivo = strlen(ruta_archivo);
+  tipo_de_archivo[0] = ruta_archivo[largo_nombre_archivo -3];
+  tipo_de_archivo[1] = ruta_archivo[largo_nombre_archivo -2];
+  tipo_de_archivo[2] = ruta_archivo[largo_nombre_archivo -1];
+  if (strcomp(tipo_de_archivo, "txt") == 0){
+    FILE* archivo_pokemones_arrecife = fopen(ruta_archivo,"r");
+    if(!archivo_pokemones_arrecife){
+      printf("No se pudo abrir el archivo de pokemones que viven en el arrecife.\n");
+      return NULL;
+    }
+
+    pokemon_t pokemon_leido;
+    int leidos = fscanf(archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie, &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color);
+    if(!leidos){
+      printf("No se pudo leer ninguna linea.\n");
+      exit(0);
+      return NULL;
+    };
+    while(leidos != EOF && !ferror(archivo_pokemones_arrecife)){
       **(pokemon+i) = pokemon_leido;
       i += 1;
-      cantidad_pokemon += 1;
-      pokemon = (pokemon_t*)realloc(pokemon,i);
-      int leidos = fscanf( archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie[MAX_ESPECIE], &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color[MAX_COLOR]);
+      (*arrecife).cantidad_pokemon += 1;
+      pokemon = (pokemon_t*)realloc(pokemon,sizeof(pokemon_t)*((size_t)(*arrecife).cantidad_pokemon +1));
+      if(pokemon == NULL) return NULL;
+      int leidos = fscanf( archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie, &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color);
+    }
+    fclose(archivo_pokemones_arrecife);
+
+  }else{
+    return NULL;
   }
-  fclose(archivo_pokemones_arrecife);
+
+  
   return &arrecife;
 }
 
@@ -58,7 +72,8 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
  */
 
 acuario_t* crear_acuario(){
-  acuario_t *acuario = (acuario_t*)malloc(sizeof(acuario_t));
+  acuario_t* acuario = malloc(sizeof(acuario_t));
+  if(acuario = NULL) return NULL;
   acuario->pokemon = malloc(sizeof(pokemon_t));
   acuario->cantidad_pokemon = malloc(sizeof(int));
   if (!acuario) return NULL;
@@ -87,7 +102,11 @@ acuario_t* crear_acuario(){
    int **cantidad_pokemones_existentes = &arrecife->cantidad_pokemon;
    int i=0;
    int n=1;
-   for(int i=0; i < cant_seleccion; i++){
+   if(cant_seleccion > (**cantidad_pokemones_existentes)){
+     printf("Vamo a calmarno! No podes trasladar tantos pokemones...");
+     return -1;
+   }
+   for(i=0; i < cant_seleccion; i++){
      if(seleccionar_pokemon && (**cantidad_pokemones_seleccionados) < (**cantidad_pokemones_existentes)){
        **(pokemones_seleccionados+i) = **(pokemones_existentes+i);
        pokemones_seleccionados = (pokemon_t*)realloc(pokemones_seleccionados,n);
@@ -110,15 +129,8 @@ acuario_t* crear_acuario(){
  */
 
  void censar_arrecife(arrecife_t* arrecife , void (* mostrar_pokemon)(pokemon_t *)){
-   pokemon_t **pokemones_nadando_felices = &arrecife->pokemon;
-   int **cantidad_de_pokemones_nadando_felices = &arrecife->cantidad_pokemon;
    printf("Pokemones en el arrecife:\n");
-   int i=0;
-   for(int i=0; i<(**cantidad_de_pokemones_nadando_felices); i++){
-     printf("-------------------");
-     printf("Especie: %c\nVelocidad: %i\nPeso: %i\nColor: %c\n",(**pokemones_nadando_felices).especie[MAX_ESPECIE], (**pokemones_nadando_felices).velocidad,(**pokemones_nadando_felices).peso,(**pokemones_nadando_felices).color[MAX_COLOR]);
-     printf("-------------------");
-   };
+   void (* mostrar_pokemon)(pokemon_t *);
  }
 
  /*
@@ -134,9 +146,11 @@ acuario_t* crear_acuario(){
      return -1;
     };
     int i=0;
-    for(int i=0; i<(**cantidad_pokemones_acuario); i++){
-      fprintf(nuevo_acuario, FORMATO_ESCRITURA, (**(datos_pokemones_en_acuario+i)).especie[MAX_ESPECIE],(**(datos_pokemones_en_acuario+i)).velocidad,(**(datos_pokemones_en_acuario+i)).peso,(**(datos_pokemones_en_acuario+i)).color[MAX_COLOR]);
+    for(i=0; i<(**cantidad_pokemones_acuario); i++){
+      fprintf(nuevo_acuario, FORMATO_ESCRITURA, (**(datos_pokemones_en_acuario+i)).especie,(**(datos_pokemones_en_acuario+i)).velocidad,(**(datos_pokemones_en_acuario+i)).peso,(**(datos_pokemones_en_acuario+i)).color);
     };
+    fclose(nuevo_acuario);
+    printf("Se generó un archivo con los pokemones del acuario");
    return 0;
  }
 
@@ -145,7 +159,6 @@ acuario_t* crear_acuario(){
  */
  void liberar_acuario(acuario_t* acuario){
    free(acuario);
-   free(acuario->cantidad_pokemon);
    free(acuario->pokemon);
  }
 
