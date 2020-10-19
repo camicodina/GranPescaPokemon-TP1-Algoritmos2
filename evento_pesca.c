@@ -128,7 +128,9 @@ acuario_t* crear_acuario(){
 
  void censar_arrecife(arrecife_t* arrecife , void (* mostrar_pokemon)(pokemon_t *)){
    printf("Pokemones en el arrecife:\n");
-   mostrar_pokemon(arrecife->pokemon);
+   for(int i=0; i < (size_t)arrecife->cantidad_pokemon; i++){
+     mostrar_pokemon((*arrecife).pokemon);
+   }
  }
 
  /*
