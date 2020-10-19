@@ -19,6 +19,7 @@
 * Devuelve un puntero a un arrecife válido o NULL en caso de error.
 */
 
+
 arrecife_t* crear_arrecife(const char* ruta_archivo){
   arrecife_t* arrecife = malloc(sizeof(arrecife_t));
   if(arrecife == NULL) return NULL;
@@ -98,18 +99,16 @@ acuario_t* crear_acuario(){
 
  int trasladar_pokemon (arrecife_t* arrecife , acuario_t* acuario , bool (* seleccionar_pokemon ) (pokemon_t *), int cant_seleccion){
    acuario->cantidad_pokemon = 0;
-   int i=0;
-   size_t n=1;
    if(cant_seleccion > ((*arrecife).cantidad_pokemon)){
      printf("Vamo a calmarno! No podes trasladar tantos pokemones...");
      return -1;
    }
-   for(i=0; i < cant_seleccion; i++){
-     if(seleccionar_pokemon && ((*acuario).cantidad_pokemon) < ((*arrecife).cantidad_pokemon)){
+   for(int i=0; i < (size_t)arrecife->cantidad_pokemon; i++){
+     if(seleccionar_pokemon(&arrecife->pokemon[i]) && ((*acuario).cantidad_pokemon) < ((*arrecife).cantidad_pokemon)){
        ((*acuario).pokemon[i]) = ((*arrecife).pokemon[i]);
-       (*acuario).pokemon = (pokemon_t*)realloc((*acuario).pokemon,n);
        acuario->cantidad_pokemon +=1;
-       n+=1;
+       (*acuario).pokemon = realloc((*acuario).pokemon,sizeof(pokemon_t)*((size_t)(*acuario).cantidad_pokemon));
+       
        for(int x= i+1; x<((*arrecife).cantidad_pokemon); x++){
          (*arrecife).pokemon[x-1] = (*arrecife).pokemon[x];
          (*arrecife).cantidad_pokemon -= 1;
@@ -118,7 +117,7 @@ acuario_t* crear_acuario(){
      }else{
        return -1;
      };
-   };
+   }
    return 0; 
  }
  
@@ -126,10 +125,11 @@ acuario_t* crear_acuario(){
  * Procedimiento que dado un arrecife deberá mostrar por pantalla a todos los pokemon que contiene.
  */
 
+
  void censar_arrecife(arrecife_t* arrecife , void (* mostrar_pokemon)(pokemon_t *)){
    printf("Pokemones en el arrecife:\n");
    for(int i=0; i < (size_t)arrecife->cantidad_pokemon; i++){
-     mostrar_pokemon((*arrecife).pokemon);
+     mostrar_pokemon(&arrecife->pokemon[i]);
    }
  }
 
