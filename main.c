@@ -1,5 +1,5 @@
-const char* ARCHIVO_ARRECIFE = "arrecife.txt";
-const char* ARCHIVO_ACUARIO = "acuario.txt";
+const char* ARCHIVO_ARRECIFE;
+const char* ARCHIVO_ACUARIO;
 const int MAX_POKEMON = 100;
 #include <stdio.h>
 #include <string.h>
@@ -100,7 +100,7 @@ void opcion1(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones)
     
 }
 
-void opcion2(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones){
+void opcion2(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones, const char* archivo_acuario){
     int eleccionMisty;
     printf("Elija qué tipo de pokemon desea trasladar:\n");
     printf("1 - Pokemones rápidos\n");
@@ -110,36 +110,34 @@ void opcion2(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones)
     printf("5 - Pokemón favorito del día\n");
     printf("0 - Volver al menú principal\n");
     scanf("%i", &eleccionMisty);
-
+    int traslado;
     int cant_seleccion;
     printf("Elija la cantidad máxima de pokemon que serán trasladados:\n");
     scanf("%i", &cant_seleccion);
 
     while(eleccionMisty!=0){
         if(eleccionMisty == 1){
-            trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_lentos, cant_seleccion);
-            guardar_datos_acuario(acuario_de_pokemones, ARCHIVO_ACUARIO);
+            traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_lentos, cant_seleccion);  
         }else if(eleccionMisty == 2){
-            trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_azules, cant_seleccion);
-            guardar_datos_acuario(acuario_de_pokemones, ARCHIVO_ACUARIO);
+            traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_azules, cant_seleccion);       
         }else if(eleccionMisty == 3){
-            trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones,pokemones_rojos , cant_seleccion);
-            guardar_datos_acuario(acuario_de_pokemones, ARCHIVO_ACUARIO);
+            traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones,pokemones_rojos , cant_seleccion);            
         }else if(eleccionMisty == 4){
-            trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_lentos, cant_seleccion);
-            guardar_datos_acuario(acuario_de_pokemones, ARCHIVO_ACUARIO);
+             traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_lentos, cant_seleccion);          
         }else if(eleccionMisty == 5){
-            trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, los_mejores_pokemones, cant_seleccion);
-            guardar_datos_acuario(acuario_de_pokemones, ARCHIVO_ACUARIO);
+            traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, los_mejores_pokemones, cant_seleccion);       
         }else{
             printf("Hubo un error, intente nuevamente:\n");
             scanf("%i", &eleccionMisty);
         };
     };
+    if (traslado == 0){
+        guardar_datos_acuario(acuario_de_pokemones, archivo_acuario);
+    };
     
 }
 
-void introduccion(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones){
+void introduccion(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones, const char* archivo_acuario){
     int intro;
     printf("Elija qué operación quiere realizar:\n");
     printf("1 - Ver pokemon disponibles en el arrecife\n");
@@ -150,10 +148,10 @@ void introduccion(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokem
     while(intro != 0x0A){
         if(intro == 1){
             opcion1(arrecife_de_pokemones, acuario_de_pokemones);
-            introduccion(arrecife_de_pokemones, acuario_de_pokemones);
+            introduccion(arrecife_de_pokemones, acuario_de_pokemones, archivo_acuario);
         }else if(intro == 2){
-            opcion2(arrecife_de_pokemones, acuario_de_pokemones);
-            introduccion(arrecife_de_pokemones, acuario_de_pokemones);
+            opcion2(arrecife_de_pokemones, acuario_de_pokemones, archivo_acuario);
+            introduccion(arrecife_de_pokemones, acuario_de_pokemones, archivo_acuario);
         }else{
             printf("Hubo un error, intente nuevamente:\n");
             scanf("%i", &intro);
@@ -164,7 +162,7 @@ void introduccion(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokem
 
 //==================// FUNCION PRINCIPAL //==================// 
 
-int main (){
+int main (int argc, char **argv){
     printf("\033[1;31m");
     printf("                                       ,'|                           \n"); 
     printf("     _.----.        ____         ,'  _|   ___    ___     ____        \n");    
@@ -181,11 +179,12 @@ int main (){
     printf("\033[0m;");
 
     printf("¡Bienvenida al sistema de monitoreo de pokemon!\n");
-
+    ARCHIVO_ARRECIFE = argv[1];
+    ARCHIVO_ACUARIO = argv[2];
     arrecife_t* arrecife_de_pokemones = crear_arrecife(ARCHIVO_ARRECIFE);
     acuario_t* acuario_de_pokemones = crear_acuario();
 
-    introduccion(arrecife_de_pokemones, acuario_de_pokemones);
+    introduccion(arrecife_de_pokemones, acuario_de_pokemones, ARCHIVO_ACUARIO);
 
     liberar_acuario(acuario_de_pokemones);
     liberar_arrecife(arrecife_de_pokemones);
