@@ -33,7 +33,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
 
   FILE* archivo_pokemones_arrecife = fopen(ruta_archivo,"r");
   if(!archivo_pokemones_arrecife){
-	  printf("No se pudo abrir el archivo de pokemones que viven en el arrecife.\n");
+	  printf("No se pudo abrir el archivo de pokemon que viven en el arrecife.\n");
       free(arrecife);
       return NULL;
     }
@@ -94,7 +94,7 @@ acuario_t* crear_acuario(){
    if(!acuario) return -1;
 
    if(cant_seleccion > (arrecife->cantidad_pokemon)){
-     printf("Vamo a calmarno! No podes trasladar tantos pokemones...");
+     printf("Vamo a calmarno! No podes trasladar tantos pokemon...");
      return -1;
 	}else{
 	   for(int i=0; i < (arrecife->cantidad_pokemon); i++){
@@ -156,7 +156,7 @@ acuario_t* crear_acuario(){
       fprintf(nuevo_acuario, FORMATO_ESCRITURA, acuario->pokemon[i].especie,acuario->pokemon[i].velocidad,acuario->pokemon[i].peso,acuario->pokemon[i].color);
     };
     fclose(nuevo_acuario);
-    printf("Se generó un archivo con los pokemones del acuario\n");
+    printf("Se generó un archivo con los pokemon del acuario\n");
     return 0;
  }
 
