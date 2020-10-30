@@ -19,13 +19,12 @@ Permite visualizar los pokemones en el arrecife y aquellos pokémon registrados 
 
 Comandos de compilación y ejecución:
 
-> $ gcc *.c -Wall -Werror -Wconversion -std=c99 -o evento_pesca
-> $ gcc -g main.c evento_pesca.o -o main                
-> $ ./main arrecife.txt acuario.txt
+> $ gcc *.c -Wall -Werror -Wconversion -std=c99 -o evento_pesca                
+> $ ./evento_pesca arrecife.txt acuario.txt
 
 Durante la elaboración del trabajo también se utilizó valgrind para la depuración de problemas de memoria utilizando el siguiente comando: 
 
-> $ valgrind --leak-check=full --track-origins=yes --show-reachable=yes ./main
+> $ valgrind --leak-check=full --track-origins=yes --show-reachable=yes ./evento_pesca
 
 
 ## Contruido con... ⚙
