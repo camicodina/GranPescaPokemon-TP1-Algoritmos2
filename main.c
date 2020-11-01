@@ -98,13 +98,16 @@ void opcion1(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones)
         break;
     default:
         printf("Hubo un error, intente nuevamente:\n");
-        scanf("%i", &valorMisty);
+        opcion1(arrecife_de_pokemones,acuario_de_pokemones);
     };
 }
 
 
 void opcion2(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones, const char* archivo_acuario){
     int eleccionMisty;
+    int cant_seleccion;
+    int trasladar = 0;
+    int guardar = 0;
     printf("Elija qué tipo de pokemon desea trasladar:\n");
     printf("1 - Pokemones rápidos\n");
     printf("2 - Pokemones azules\n");
@@ -113,38 +116,51 @@ void opcion2(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones,
     printf("5 - Pokemón favorito del día\n");
     printf("0 - Volver al menú principal\n");
     scanf("%i", &eleccionMisty);
-
-    int traslado;
-    int cant_seleccion;
-    printf("Elija la cantidad máxima de pokemon que serán trasladados:\n");
-    scanf("%i", &cant_seleccion);
-
+    
     switch(eleccionMisty){
     case 1:
-        traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_rapidos, cant_seleccion);
+        printf("Elija la cantidad máxima de pokemon que serán trasladados:\n");
+        scanf("%i", &cant_seleccion);
+        trasladar = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_rapidos, cant_seleccion);
         break;
     case 2:
-        traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_azules, cant_seleccion);
+        printf("Elija la cantidad máxima de pokemon que serán trasladados:\n");
+        scanf("%i", &cant_seleccion);
+        trasladar = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_azules, cant_seleccion);
         break;
     case 3:
-        traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones,pokemones_rojos , cant_seleccion);
+        printf("Elija la cantidad máxima de pokemon que serán trasladados:\n");
+        scanf("%i", &cant_seleccion);
+        trasladar = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones,pokemones_rojos , cant_seleccion);
         break;
     case 4:
-        traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_lentos, cant_seleccion);
+        printf("Elija la cantidad máxima de pokemon que serán trasladados:\n");
+        scanf("%i", &cant_seleccion);
+        trasladar = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, pokemones_lentos, cant_seleccion);
         break;
     case 5: 
-        traslado = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, los_mejores_pokemones, cant_seleccion);
+        printf("Elija la cantidad máxima de pokemon que serán trasladados:\n");
+        scanf("%i", &cant_seleccion);
+        trasladar = trasladar_pokemon(arrecife_de_pokemones, acuario_de_pokemones, los_mejores_pokemones, cant_seleccion);
         break;
     case 0:
         break;
     default:
          printf("Hubo un error, intente nuevamente:\n");
-         scanf("%i", &eleccionMisty);
+         opcion2(arrecife_de_pokemones,acuario_de_pokemones,archivo_acuario);
     };
-
-    if (traslado == 0){
-        guardar_datos_acuario(acuario_de_pokemones, archivo_acuario);
-    }; 
+    if(trasladar == -1){
+        printf("Hubo un error, intente nuevamente:\n");
+        opcion2(arrecife_de_pokemones,acuario_de_pokemones,archivo_acuario);
+    }else{
+        guardar = guardar_datos_acuario(acuario_de_pokemones, archivo_acuario);
+        if(guardar == -1){
+            printf("No se pudo generar un archivo con los pokemon del acuario\n");
+        }else{
+            printf("Se generó un archivo con los pokemon del acuario\n");
+        }
+    }
+     
 }
 
 void introduccion(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokemones, const char* archivo_acuario){
@@ -155,28 +171,28 @@ void introduccion(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokem
     printf("0 - Salir\n");
     scanf("%i", &intro);
 
-    
-    if(intro == 1){
+    switch (intro){
+    case 1:
         opcion1(arrecife_de_pokemones, acuario_de_pokemones);
         introduccion(arrecife_de_pokemones, acuario_de_pokemones, archivo_acuario);
-    }else if(intro == 2){
+        break;
+    case 2:
         opcion2(arrecife_de_pokemones, acuario_de_pokemones, archivo_acuario);
         introduccion(arrecife_de_pokemones, acuario_de_pokemones, archivo_acuario);
-    }else if(intro ==0){
-        liberar_acuario(acuario_de_pokemones);
-        liberar_arrecife(arrecife_de_pokemones);
-    }else{
+        break;
+    case 0:
+        break;
+    default:
         printf("Hubo un error, intente nuevamente:\n");
         introduccion(arrecife_de_pokemones, acuario_de_pokemones, archivo_acuario); 
-    }
-
-    
+        break;
+    };
 }
 
 //==================// FUNCION PRINCIPAL //==================// 
 
 int main (int argc, char **argv){
-    printf("\033[1;31m");
+    printf("\033[01;33m");
     printf("                                       ,'|                           \n"); 
     printf("     _.----.        ____         ,'  _|   ___    ___     ____        \n");    
     printf(" _,-'       `.     |    |  /`.   |,-'    |   |  /   |   |    |  |`.  \n");   
@@ -189,16 +205,16 @@ int main (int argc, char **argv){
     printf("        |    | `.__,'|  |`-._    `|      |__| |/ |  `.__,'|  | |   | \n");    
     printf("         |_.-'       |__|    `-._ |              '-.|     '-.| |   | \n");   
     printf("                                 `'                            '-._| \n");    
-    printf("\033[0m;");
+    printf("\033[0m");
 
     printf("¡Bienvenida al sistema de monitoreo de pokemon!\n");
     ARCHIVO_ARRECIFE = argv[1];
     ARCHIVO_ACUARIO = argv[2];
     arrecife_t* arrecife_de_pokemones = crear_arrecife(ARCHIVO_ARRECIFE);
     acuario_t* acuario_de_pokemones = crear_acuario();
-
     introduccion(arrecife_de_pokemones, acuario_de_pokemones, ARCHIVO_ACUARIO);
-
+    liberar_acuario(acuario_de_pokemones);
+    liberar_arrecife(arrecife_de_pokemones);
     return 0;
 }
 

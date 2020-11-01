@@ -1,0 +1,4 @@
+Squirtle;43;9;azul
+Bulbasaur;20;33;verde
+Slowking;30;79;rosa
+Seaking;79;39;rojo

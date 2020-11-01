@@ -1,0 +1,5 @@
+Basculin:98;18;verde
+Barraskewda:136;30;marron
+Arceus:120;320;blanco
+Poliwhirl:90;20;azul
+Tentacruel:100;55;azul

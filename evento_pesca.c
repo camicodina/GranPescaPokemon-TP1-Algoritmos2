@@ -24,12 +24,8 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
   arrecife_t* arrecife = malloc(sizeof(arrecife_t));
   if(!arrecife) return NULL;
   arrecife->cantidad_pokemon=0;
-  arrecife->pokemon= malloc(sizeof(pokemon_t));
-  if(!(arrecife->pokemon)){
-    free(arrecife);
-    return NULL;
-  };
-  int i=0;
+  arrecife->pokemon= NULL;
+
 
   FILE* archivo_pokemones_arrecife = fopen(ruta_archivo,"r");
   if(!archivo_pokemones_arrecife){
@@ -42,19 +38,34 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
   if(!leidos){
 	  printf("No se pudo leer ninguna linea.\n");
 	  fclose(archivo_pokemones_arrecife);
-      return NULL;
+    free(arrecife);
+    return NULL;
     };
 
   while(!feof(archivo_pokemones_arrecife)){
 	  if (leidos == 4){
-		  (arrecife->pokemon[i]) = pokemon_leido;
-		  i++;
-		  arrecife->cantidad_pokemon++;
-		  pokemon_t* pokemon_nuevo = realloc(arrecife->pokemon,sizeof(pokemon_t)*((size_t)arrecife->cantidad_pokemon+1));
-		  if(!pokemon_nuevo) return NULL;
-		  arrecife->pokemon = pokemon_nuevo;
-		  leidos = fscanf( archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie, &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color);
-	  };
+      if(arrecife->pokemon == NULL){
+        pokemon_t* pokemon_nuevo = malloc(sizeof(pokemon_t));
+        if(!pokemon_nuevo){
+          free(arrecife);
+          return NULL;
+        };
+        arrecife->pokemon = pokemon_nuevo;
+        (arrecife->pokemon[arrecife->cantidad_pokemon]) = pokemon_leido;
+        arrecife->cantidad_pokemon++;
+      }else{
+        pokemon_t* pokemon_a_agregar = realloc(arrecife->pokemon,sizeof(pokemon_t)*((size_t)arrecife->cantidad_pokemon+1));
+		    if(!pokemon_a_agregar){
+          free(arrecife);
+          free(arrecife->pokemon);
+          return NULL;
+        };
+        arrecife->pokemon = pokemon_a_agregar;
+        (arrecife->pokemon[arrecife->cantidad_pokemon]) = pokemon_leido;
+        arrecife->cantidad_pokemon++;
+      };
+		leidos = fscanf( archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie, &(pokemon_leido.velocidad), &(pokemon_leido.peso), pokemon_leido.color);  
+    };
   };
   fclose(archivo_pokemones_arrecife);
 
@@ -88,45 +99,62 @@ acuario_t* crear_acuario(){
  * Devuelve -1 en caso de error o 0 en caso contrario.
  */
 
+
  int trasladar_pokemon (arrecife_t* arrecife , acuario_t* acuario , bool (* seleccionar_pokemon ) (pokemon_t *), int cant_seleccion){
-   if(!arrecife) return -1;
-   if(!(arrecife->pokemon)) return -1;
-   if(!acuario) return -1;
+  if(!arrecife) return -1;
+  if(!(arrecife->pokemon)) return -1;
+  if(!acuario) return -1;
+  int posicion_poke_a_trasladar[cant_seleccion];
+  int cantidad_poke_a_trasladar = 0;
+  int x=0;
 
-   if(cant_seleccion > (arrecife->cantidad_pokemon)){
-     printf("Vamo a calmarno! No podes trasladar tantos pokemon...");
-     return -1;
-	}else{
-	   for(int i=0; i < (arrecife->cantidad_pokemon); i++){
-			if(seleccionar_pokemon(arrecife->pokemon+i) && (acuario->cantidad_pokemon) < (arrecife->cantidad_pokemon)){
-				if(acuario->pokemon==NULL){
-					pokemon_t* pokemon_creado = malloc(sizeof(pokemon_t));
-					if(!pokemon_creado) return -1;
-					acuario->pokemon = pokemon_creado;
-					acuario->pokemon[0] = arrecife->pokemon[i];
-				}else{
-					pokemon_t* pokemon_agregado = realloc(acuario->pokemon,sizeof(pokemon_t)*((size_t)acuario->cantidad_pokemon+1));
-					if(!pokemon_agregado) return -1;
-					acuario->pokemon = pokemon_agregado;
-					(acuario->pokemon[acuario->cantidad_pokemon]) = (arrecife->pokemon[i]);
-				};
-				acuario->cantidad_pokemon++;
+  if(arrecife->cantidad_pokemon < cant_seleccion || cant_seleccion<0){
+      printf("Vamo a calmarno! No podes trasladar tantos pokemon...\n");
+      return -1;
+    };
 
-				for(int x=i+1; x<(arrecife->cantidad_pokemon); x++){
-					arrecife->pokemon[x-1] = arrecife->pokemon[x];
-					pokemon_t* pokemon_sacado = realloc(arrecife->pokemon,sizeof(pokemon_t)*((size_t)arrecife->cantidad_pokemon-1));
-					if(!pokemon_sacado) return -1;
-					arrecife->pokemon = pokemon_sacado;
-					arrecife->cantidad_pokemon--;
-				};
-			}else{
-				return -1;
-			};
-		}
+  for(x=0; x<(arrecife->cantidad_pokemon);x++){
+    if(seleccionar_pokemon(arrecife->pokemon+x)){
+      posicion_poke_a_trasladar[cantidad_poke_a_trasladar] = x;
+      cantidad_poke_a_trasladar++;
+    }
+  }
+
+  if(cantidad_poke_a_trasladar<cant_seleccion){
+    printf("Vamo a calmarno! No podes trasladar tantos pokemon...\n");
+    return -1;
+  }
+
+  for(int i=0; i < cant_seleccion; i++){
+      if(acuario->pokemon == NULL){
+        pokemon_t* pokemon_creado = malloc(sizeof(pokemon_t));
+				if(!pokemon_creado)return -1;
+				acuario->pokemon = pokemon_creado;
+				acuario->pokemon[acuario->cantidad_pokemon] = arrecife->pokemon[posicion_poke_a_trasladar[i]];
+        acuario->cantidad_pokemon++;
+      }else{
+        pokemon_t* pokemon_agregado = realloc(acuario->pokemon,sizeof(pokemon_t)*((size_t)acuario->cantidad_pokemon+1));
+				if(!pokemon_agregado) return -1;
+				acuario->pokemon = pokemon_agregado;
+        acuario->pokemon[acuario->cantidad_pokemon] = arrecife->pokemon[posicion_poke_a_trasladar[i]];
+        acuario->cantidad_pokemon++;
+      };
+    };
+
+    for(int j=0; j<cant_seleccion; j++){
+      int posicion_del_poke_trasladado = posicion_poke_a_trasladar[j];
+      for(int k=posicion_del_poke_trasladado+1; k<(arrecife->cantidad_pokemon); k++){
+        arrecife->pokemon[k-1] = arrecife->pokemon[k];
+      };
+      pokemon_t* pokemon_sacado = realloc(arrecife->pokemon,sizeof(pokemon_t)*((size_t)arrecife->cantidad_pokemon-1));
+			if(!pokemon_sacado) return -1;
+			arrecife->pokemon = pokemon_sacado;
+			arrecife->cantidad_pokemon--;
+    };
+
 		return 0; 
-   }
+}
 
- }
  
  /*
  * Procedimiento que dado un arrecife deberá mostrar por pantalla a todos los pokemon que contiene.
@@ -156,7 +184,6 @@ acuario_t* crear_acuario(){
       fprintf(nuevo_acuario, FORMATO_ESCRITURA, acuario->pokemon[i].especie,acuario->pokemon[i].velocidad,acuario->pokemon[i].peso,acuario->pokemon[i].color);
     };
     fclose(nuevo_acuario);
-    printf("Se generó un archivo con los pokemon del acuario\n");
     return 0;
  }
 
@@ -164,10 +191,16 @@ acuario_t* crear_acuario(){
  * Libera la memoria que fue reservada para el acuario.
  */
  void liberar_acuario(acuario_t* acuario){
+   if(acuario->cantidad_pokemon != 0){
+     free(acuario->pokemon);
+   }
    free(acuario);
  }
 
  void liberar_arrecife(arrecife_t* arrecife){
+   if(arrecife->cantidad_pokemon != 0){
+     free(arrecife->pokemon);
+   }
    free(arrecife);
  }
  
