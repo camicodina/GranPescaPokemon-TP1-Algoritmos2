@@ -8,7 +8,7 @@
 
 #define MAX_ESPECIE 100
 #define MAX_COLOR 50
-#define FORMATO_LECTURA "%[^;];%i;%i;%[^\n]\n"
+#define FORMATO_LECTURA "%30[^;];%i;%i;%30[^\n]\n"
 #define FORMATO_ESCRITURA "%s:%i;%i;%s\n"
 
 typedef struct pokemon{
@@ -59,12 +59,12 @@ acuario_t* crear_acuario();
  * acuario (su tamaño se ajustará luego de cada traslado).
  * Devuelve -1 en caso de error o 0 en caso contrario.
  */
-int trasladar_pokemon(arrecife_t* arrecife, acuario_t* acuario, bool (*seleccionar_pokemon) (pokemon_t*), int cant_seleccion);
+int trasladar_pokemon (arrecife_t* arrecife , acuario_t* acuario , bool (* seleccionar_pokemon ) (pokemon_t *), int cant_seleccion);
 
 /*
  * Procedimiento que dado un arrecife deberá mostrar por pantalla a todos los pokemon que contiene.
  */
-void censar_arrecife(arrecife_t* arrecife, void (*mostrar_pokemon)(pokemon_t*));
+ void censar_arrecife(arrecife_t* arrecife , void (* mostrar_pokemon)(pokemon_t *));
 
 /*
  * Función que dado un acuario guarda en un archivo de texto a los pokemones que contiene.

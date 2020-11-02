@@ -1,0 +1,2 @@
+Basculin:98;18;verde
+Barraskewda:136;30;marron

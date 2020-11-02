@@ -171,7 +171,7 @@ void introduccion(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokem
     printf("0 - Salir\n");
     scanf("%i", &intro);
 
-    switch (intro){
+    switch(intro){
     case 1:
         opcion1(arrecife_de_pokemones, acuario_de_pokemones);
         introduccion(arrecife_de_pokemones, acuario_de_pokemones, archivo_acuario);
@@ -185,7 +185,6 @@ void introduccion(arrecife_t* arrecife_de_pokemones, acuario_t* acuario_de_pokem
     default:
         printf("Hubo un error, intente nuevamente:\n");
         introduccion(arrecife_de_pokemones, acuario_de_pokemones, archivo_acuario); 
-        break;
     };
 }
 
@@ -211,12 +210,11 @@ int main (int argc, char **argv){
     ARCHIVO_ARRECIFE = argv[1];
     ARCHIVO_ACUARIO = argv[2];
     arrecife_t* arrecife_de_pokemones = crear_arrecife(ARCHIVO_ARRECIFE);
+    
     acuario_t* acuario_de_pokemones = crear_acuario();
+   
     introduccion(arrecife_de_pokemones, acuario_de_pokemones, ARCHIVO_ACUARIO);
     liberar_acuario(acuario_de_pokemones);
     liberar_arrecife(arrecife_de_pokemones);
     return 0;
 }
-
-
-

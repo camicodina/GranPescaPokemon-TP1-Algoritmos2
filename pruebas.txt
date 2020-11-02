@@ -1,0 +1,7 @@
+./evento_pesca acuario.txt
+./evento_pesca
+./evento_pesca arrecife_invalido.txt acuario.txt
+./evento_pesca arrecife_sin_rapidos acuario.txt
+./evento_pesca arrecife.txt acuario.txt
+./evento_pesca evento_pesca.h acuario.txt
+
