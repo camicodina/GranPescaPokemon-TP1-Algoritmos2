@@ -19,12 +19,10 @@
 * Devuelve un puntero a un arrecife válido o NULL en caso de error.
 */
 
-
 arrecife_t* crear_arrecife(const char* ruta_archivo){
 
   FILE* archivo_pokemones_arrecife = fopen(ruta_archivo,"r");
   if(!archivo_pokemones_arrecife){
-	  printf("No se pudo abrir el archivo de pokemon que viven en el arrecife.\n");
       return NULL;
     }
 
@@ -34,7 +32,6 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
   pokemon_t pokemon_leido;
   int leidos = fscanf(archivo_pokemones_arrecife, FORMATO_LECTURA, pokemon_leido.especie, &pokemon_leido.velocidad, &pokemon_leido.peso, pokemon_leido.color);
   if(!leidos || leidos!=4){
-	  printf("No se pudo leer ninguna linea.\n");
 	  fclose(archivo_pokemones_arrecife);
     free(arrecife);
     return NULL;
@@ -64,6 +61,7 @@ arrecife_t* crear_arrecife(const char* ruta_archivo){
   
   return arrecife;
 }
+
 
  /*
  * Función que crea un acuario vacío reservando la memoria necesaria para el mismo.

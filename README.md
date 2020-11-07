@@ -24,7 +24,7 @@ Comandos de compilación y ejecución:
 
 Durante la elaboración del trabajo también se utilizó valgrind para la depuración de problemas de memoria utilizando el siguiente comando: 
 
-> $ valgrind --leak-check=full --track-origins=yes --show-reachable=yes ./evento_pesca
+> $ valgrind --leak-check=full --track-origins=yes --show-reachable=yes ./evento_pesca arrecife.txt acuario.txt 
 
 
 ## Contruido con... ⚙
