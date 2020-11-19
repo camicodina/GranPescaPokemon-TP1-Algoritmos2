@@ -1,7 +1,0 @@
-Seaking:68;39;rojo
-Octillery:45;28;rojo
-Kingler:75;60;rojo
-Crawdaunt:55;33;rojo
-Goldeen:63;15;rojo
-Krabby:50;6;rojo
-Corphish:35;11;rojo
